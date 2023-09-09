@@ -4,7 +4,9 @@ import Index_page from "./pages/index.jsx";
 import Login from "./pages/loginPage";
 import Layout from "./Layout";
 import Signup from "./pages/signupPage";
+import axios from "axios";
 
+axios.defaults.baseURL = 'http://localhost:6969'
 function App() {
   return (
     <BrowserRouter>
