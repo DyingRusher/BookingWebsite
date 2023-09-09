@@ -1,21 +1,57 @@
-const express = require('express')
+const express = require("express");
+const User = require("./models/User.js");
 const app = express();
-const cors = require('cors') // for cammunication between ports
+const bcrypt = require("bcryptjs"); // for encryption
+const cors = require("cors"); // for cammunication between ports
+const mongoose = require("mongoose");
 
-app.use(express.json()) // for parsing json
-app.use(cors({
-    credentails:true,
-    origin:'http://localhost:5173' 
+require("dotenv").config(); // FOR PROPER WORKING OF ENV
+
+const dbconnect = async () => {
+  await mongoose.connect(process.env.MONGOOSE_URL).then(
+    () => {
+      console.info(`Connected to database`);
+    },
+    (error) => {
+      console.error(`Connection error: ${error.stack}`);
+      process.exit(1);
     }
-))
+  );
+};
+dbconnect()
+  .then((res) => {
+    console.log(res);
+  })
+  .catch((res) => {
+    console.log(res);
+  });
 
-app.get('/test',(req,res)=>{
-    res.json('done');
+app.use(express.json()); // for parsing json
+app.use(
+  cors({
+    credentails: true,
+    origin: "http://localhost:5173",
+  })
+);
+
+// console.log(process.env.MONGOOSE_URL);
+
+app.get("/test", (req, res) => {
+  res.json("done");
 });
 
-app.post('/register',(req,res)=>{
-    const {name,email,password} = req.body;
-    res.json({name,email,password}) //it will giv error
-})
+const secret = bcrypt.genSaltSync(8);
 
-app.listen(6969)
+app.post("/register", async (req, res) => {
+  const { name, email, password } = req.body;
+  //   res.json({ name, email, password }); //it will give error
+  const user = await User.create({
+    name,
+    email,
+    password: bcrypt.hashSync(password, secret),
+  });
+
+  res.json(user);
+});
+
+app.listen(6969);
