@@ -1,18 +1,25 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import axios, { Axios } from 'axios'
+import axios from 'axios'
 
 export default function Signup() {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
-
-  function registerUser(ev){
-    ev.preventDefault()
-    axios.post('/register',{
-      name,email,password
-    })
-  }
+ 
+    function registerUser(ev){
+      try{
+      ev.preventDefault()
+      axios.post('/register',{
+        name,email,password
+      })
+    }catch(er){
+      alert(`Registration Failed ,try again\nerror:${er}`)
+      console.log(er)
+    }
+    }
+  
+  
   return (
     <div className="mt-4 grow flex items-center justify-around">
       <div className="mb-32">
@@ -37,7 +44,7 @@ export default function Signup() {
             onChange={(ev) => {
               console.log("s");
               setPassword(ev.target.value);
-              console.log(password);
+              // console.log(password);
             }}
           />
           <button className="loginBtn">Sign up</button>
