@@ -6,8 +6,11 @@ import Layout from "./Layout";
 import Signup from "./pages/signupPage";
 import axios from "axios";
 
-axios.defaults.baseURL = 'http://localhost:6969'
-function App() {
+axios.defaults.baseURL = 'http://127.0.0.1:6969'
+// axios.defaults.withCredentials = true;
+// axios.defaults.headers.common['Access-Control-Allow-Credentials'] = true
+// axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*'
+function App() { 
   return (
     <BrowserRouter>
       <Routes>

@@ -6,12 +6,18 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  async function LoginUser(ev){
-    ev.preventDefault()
-    try{
-      await axios.post('/login',{email,password})
-    }catch(er){
-      console.log(`Error during login user:${er}`)
+  async function LoginUser(ev) {
+    ev.preventDefault();
+    try {
+      await axios.post(
+        "/login",
+        { email, password },
+        {
+          withCredentials:true
+        }
+      ).then(()=>{console.log("nice")}).catch((er)=>{console.log(er)});
+    } catch (er) {
+      console.log(`Error during login user${er}`);
     }
   }
 

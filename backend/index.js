@@ -53,30 +53,34 @@ app.post("/register", async (req, res) => {
       email,
       password: bcrypt.hashSync(password, secret),
     });
-
     res.json(user);
     user.save()
     
   }catch(er){
     res.status(422).json(er)
   }
-
+  
   
 });
 
 
 app.post('/login',async (req,res)=>{
+  // req.header['Access-Control-Allow-Credentials'] = tr ue
   const {email,password} = req.body;
   try{
   const userdoc = await  User.findOne({email})
   if(userdoc){
     // res.json('found')
     const pass = bcrypt.compareSync(password,userdoc.password)
+    
     if(pass){
-      res.json('nice')
+      // res.json('nice')
       jet.sign({email:userdoc.email,id:userdoc._id},jetDash,{},(er,token)=>{
         if(er) throw er;
+        res.header('Access-Control-Allow-Credentials','true')
+        res.set('Access-Control-Allow-Origin','*')
         res.cookie('token',token).json('right pass')  // but this will not save cookie in host 5173 so to do it see in loginpage
+        console.log(token) 
       })
     }else{
       res.json('not nice')
