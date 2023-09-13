@@ -1,32 +1,42 @@
 import axios from "axios";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useContext, useState } from "react";
+import { Link, Navigate } from "react-router-dom";
+import { userContext } from "../UserContext";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [validU, setValidU] = useState(false);
+  const { setUser } = useContext(userContext);
 
   async function LoginUser(ev) {
     ev.preventDefault();
     try {
-      await axios
-        .post(
-          "/login",
-          { email, password },
-          {
-            headers: { "Access-Control-Allow-Origin": "*",'Access-Control-Allow-Credentials' :true},
-            // withCredentials: true,
-          }
-        )
-        .then(() => {
-          console.log("nice");
-        })
-        .catch((er) => {
-          console.log(er);
-        });
+      const user1 = await axios.post(
+        "/login",
+        { email, password },
+        {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Credentials": true,
+          },
+          withCredentials: true,
+        }
+      );
+
+      if (!!user1) {
+        setValidU(true);
+      }
+      console.log(user1);
+      setUser(user1.data );
     } catch (er) {
       console.log(`Error during login user${er}`);
     }
+  }
+
+  if (validU) {
+    // console.log("Sdf");
+    return <Navigate to={"/"} />;
   }
 
   return (
