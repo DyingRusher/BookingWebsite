@@ -9,13 +9,21 @@ export default function Login() {
   async function LoginUser(ev) {
     ev.preventDefault();
     try {
-      await axios.post(
-        "/login",
-        { email, password },
-        {
-          withCredentials:true
-        }
-      ).then(()=>{console.log("nice")}).catch((er)=>{console.log(er)});
+      await axios
+        .post(
+          "/login",
+          { email, password },
+          {
+            headers: { "Access-Control-Allow-Origin": "*",'Access-Control-Allow-Credentials' :true},
+            // withCredentials: true,
+          }
+        )
+        .then(() => {
+          console.log("nice");
+        })
+        .catch((er) => {
+          console.log(er);
+        });
     } catch (er) {
       console.log(`Error during login user${er}`);
     }

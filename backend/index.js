@@ -29,13 +29,26 @@ dbconnect()
 
 const jetDash ='jetIsSecondGrestetDualist'
 app.use(express.json()); // for parsing json
-app.use(
-  cors({
-    credentails: true,
-    origin: "http://localhost:5173",
-  })
-);
+// app.use(
+//   cors({
+//     credentails: true,
+//     origin: "http://localhost:5173",
+//   })
+// );
+const allowedOrigins = ['http://localhost:5173'];
 
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true, // Allow credentials (e.g., cookies) to be sent with the request
+};
+
+app.use(cors(corsOptions));
 // console.log(process.env.MONGOOSE_URL);
 
 app.get("/test", (req, res) => {
@@ -75,13 +88,14 @@ app.post('/login',async (req,res)=>{
     
     if(pass){
       // res.json('nice')
-      jet.sign({email:userdoc.email,id:userdoc._id},jetDash,{},(er,token)=>{
-        if(er) throw er;
-        res.header('Access-Control-Allow-Credentials','true')
-        res.set('Access-Control-Allow-Origin','*')
-        res.cookie('token',token).json('right pass')  // but this will not save cookie in host 5173 so to do it see in loginpage
+      const token = await jet.sign({email:userdoc.email,id:userdoc._id},jetDash,{})
+        // res.header('Access-Control-Allow-Credentials','tr  ue')
+        // res.header('Access-Control-Allow-Origin','*')
+        // res.header('Access-Control-Allow-Origin', "*");
+        res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+        res.header('Access-Control-Allow-Headers', 'Content-Type');
+        res.cookie('token',token,{sameSite:'none',secure:true}).json('right pass')  // but this will not save cookie in host 5173 so to do it see in loginpage
         console.log(token) 
-      })
     }else{
       res.json('not nice')
     }
