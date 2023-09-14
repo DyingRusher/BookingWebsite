@@ -123,4 +123,9 @@ app.get('/profile',(req,res)=>{
     }
     // res.json({token})
 })
+
+
+app.post('/logout',async (req,res)=>{
+  return res.cookie("token", '', { sameSite: "none", secure: true }).json(true)
+})
 app.listen(6969);

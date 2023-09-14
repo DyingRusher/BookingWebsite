@@ -26,9 +26,10 @@ export default function Login() {
 
       if (!!user1) {
         setValidU(true);
+        console.log(validU)
+        setUser(user1.data);
       }
-      console.log(user1);
-      setUser(user1.data );
+      // console.log(user1);
     } catch (er) {
       console.log(`Error during login user${er}`);
     }
