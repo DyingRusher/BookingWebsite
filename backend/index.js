@@ -6,10 +6,12 @@ const bcrypt = require("bcryptjs"); // for encryption
 const cors = require("cors"); // for cammunication between ports
 const mongoose = require("mongoose");
 const cookirParser = require('cookie-parser')
+const imageDown = require('image-downloader')
 require("dotenv").config(); // FOR PROPER WORKING OF ENV
 
 
 app.use(cookirParser())
+app.use('/uploads',express.static(__dirname+'/uploads'))
 const dbconnect = async () => {
   await mongoose.connect(process.env.MONGOOSE_URL).then(
     () => {
@@ -127,5 +129,17 @@ app.get('/profile',(req,res)=>{
 
 app.post('/logout',async (req,res)=>{
   return res.cookie("token", '', { sameSite: "none", secure: true }).json(true)
+})
+// console.log(__dirname)
+
+
+app.post('/addImage-account' , async (req,res)=>{
+  const {link} = req.body;
+  const newName ='photo' + Date.now() + '.jpg'
+  await imageDown.image({
+    url:link,
+    dest:__dirname + '/uploads/' + newName
+  })
+  res.json(newName)
 })
 app.listen(6969);
