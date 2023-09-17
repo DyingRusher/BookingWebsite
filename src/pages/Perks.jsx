@@ -1,12 +1,22 @@
 export default function Perks({selected,onChange}){
     function perks() {
         return "flex border rounded-xl gap-4 px-3 m-2 py-5 ";
+      } 
+
+      function handelPerks(ev){
+        const {checked,name} = ev.target
+        if(checked){
+            onChange([...selected,name])
+        }else{
+            onChange([...selected.filter(selectedName => selectedName !== name)])
+        }
+        console.log(selected)
       }
     return (
         <>
         <div className="grid mt-3 grid-cols-2 md:grid-cols-4 lg:grid-cols-6">
             <label className={perks()}>
-              <input type="checkbox" name="" id="" />
+              <input type="checkbox" onChange={handelPerks} name="wifi" id="" />
               <span className="flex gap-4 my-auto">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -26,7 +36,7 @@ export default function Perks({selected,onChange}){
               </span>
             </label>
             <label className={perks()}>
-              <input type="checkbox" name="" id="" />
+              <input type="checkbox" onChange={handelPerks} name="ac" id="" />
               <span className="flex gap-4  my-auto">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -46,7 +56,7 @@ export default function Perks({selected,onChange}){
               </span>
             </label>
             <label className={perks()}>
-              <input type="checkbox" name="" id="" />
+              <input type="checkbox" onChange={handelPerks} name="swimmingpool" id="" />
               <span className="flex gap-4 my-auto">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -71,7 +81,7 @@ export default function Perks({selected,onChange}){
               </span>
             </label>
             <label className={perks()}>
-              <input type="checkbox" name="" id="" />
+              <input type="checkbox" onChange={handelPerks} name="garden" id="" />
               <span className="flex gap-4 my-auto">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -91,7 +101,7 @@ export default function Perks({selected,onChange}){
               </span>
             </label>
             <label className={perks()}>
-              <input type="checkbox" name="" id="" />
+              <input type="checkbox" onChange={handelPerks} name="security" id="" />
               <span className="flex gap-4 my-auto">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

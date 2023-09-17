@@ -7,11 +7,15 @@ const cors = require("cors"); // for cammunication between ports
 const mongoose = require("mongoose");
 const cookirParser = require('cookie-parser')
 const imageDown = require('image-downloader')
+const multer = require('multer')
+const fs = require('fs') //file system
 require("dotenv").config(); // FOR PROPER WORKING OF ENV
 
 
 app.use(cookirParser())
+
 app.use('/uploads',express.static(__dirname+'/uploads'))
+
 const dbconnect = async () => {
   await mongoose.connect(process.env.MONGOOSE_URL).then(
     () => {
@@ -141,5 +145,18 @@ app.post('/addImage-account' , async (req,res)=>{
     dest:__dirname + '/uploads/' + newName
   })
   res.json(newName)
+})
+
+const photoMiddleWare = multer({dest:'uploads'})
+app.post('/upload',photoMiddleWare.array('photos',100),(req,res)=>{
+  const uploadedfiles = []
+  for (let i=0;i<req.files.length;i++){
+    const {path,originalname} = req.files[i];
+    newpath = path+'.jpg';
+    fs.renameSync(path,newpath)
+    uploadedfiles.push(newpath.replace('uploads\\',''))
+  }
+  console.log(uploadedfiles)
+  res.json(uploadedfiles)
 })
 app.listen(6969);
