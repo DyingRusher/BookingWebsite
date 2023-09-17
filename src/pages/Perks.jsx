@@ -1,13 +1,13 @@
 export default function Perks({selected,onChange}){
     function perks() {
-        return "flex border rounded-xl gap-4 px-3 m-2 py-5";
+        return "flex border rounded-xl gap-4 px-3 m-2 py-5 ";
       }
     return (
         <>
         <div className="grid mt-3 grid-cols-2 md:grid-cols-4 lg:grid-cols-6">
             <label className={perks()}>
               <input type="checkbox" name="" id="" />
-              <span className="flex gap-4">
+              <span className="flex gap-4 my-auto">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -27,7 +27,7 @@ export default function Perks({selected,onChange}){
             </label>
             <label className={perks()}>
               <input type="checkbox" name="" id="" />
-              <span className="flex gap-4">
+              <span className="flex gap-4  my-auto">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -47,7 +47,7 @@ export default function Perks({selected,onChange}){
             </label>
             <label className={perks()}>
               <input type="checkbox" name="" id="" />
-              <span className="flex gap-4">
+              <span className="flex gap-4 my-auto">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -72,7 +72,7 @@ export default function Perks({selected,onChange}){
             </label>
             <label className={perks()}>
               <input type="checkbox" name="" id="" />
-              <span className="flex gap-4">
+              <span className="flex gap-4 my-auto">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -92,7 +92,7 @@ export default function Perks({selected,onChange}){
             </label>
             <label className={perks()}>
               <input type="checkbox" name="" id="" />
-              <span className="flex gap-4">
+              <span className="flex gap-4 my-auto">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"

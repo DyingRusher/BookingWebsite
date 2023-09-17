@@ -15,6 +15,7 @@ export default function PlacePage() {
   const [checkOut,setCheckOut] = useState('')
   const [checkIn,setCheckIn] = useState('')
   const [maxGuests,setMaxGuests] = useState('')
+  const [readyAddPhoto,setReadyAddPhoto] = useState(false)
   // console.log(action)
   function h2andp(header,para){
 
@@ -27,13 +28,15 @@ export default function PlacePage() {
   }
 
  async function AddPhotos(ev){
+  setReadyAddPhoto(true)
   ev.preventDefault()
   const {data:filename} = await axios.post('/addimage-account',{link:photoLink})
   setPhotoLink('')
   await setAddedPhotos((pre)=>{
     return [...pre,filename]
   })
-  console.log(addedPhotos)
+  // console.log(addedPhotos)
+  setReadyAddPhoto(false)
   }
   return (
     <div>
@@ -81,10 +84,17 @@ export default function PlacePage() {
               Add&nbsp; photo
             </button>
           </div>
+          <div className="flex gap-5">
+          {
+            readyAddPhoto && (
+              <img className="rounded-3xl"src="https://media.tenor.com/6AJbOBwmcVsAAAAC/reloading-valorant.gif" alt="" />
+            )
+          }
+         
           {addedPhotos.length > 0 && (
               addedPhotos.map( link => (
-                <div>
-                  <img src={'http://localhost:6969/uploads/' + link} alt="sd" />
+                <div >
+                  <img className="rounded-xl max-w-fit max-h-fit mt-3 "src={'http://localhost:6969/uploads/' + link} alt="sd" />
                 </div>
                 
               ) 
@@ -107,6 +117,7 @@ export default function PlacePage() {
               </svg>
               Upload
             </button>
+          </div>
           </div>
           {h2andp('Description','Description of place')}
           <textarea className="border rounded-xl w-full py-6" value={description} onChange={ev => setDescription(ev.target.value)}/>
