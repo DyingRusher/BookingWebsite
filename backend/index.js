@@ -3,18 +3,18 @@ const User = require("./models/User.js");
 const app = express();
 const jet = require("jsonwebtoken");
 const bcrypt = require("bcryptjs"); // for encryption
+const Place = require("./models/Place.js");
 const cors = require("cors"); // for cammunication between ports
 const mongoose = require("mongoose");
-const cookirParser = require('cookie-parser')
-const imageDown = require('image-downloader')
-const multer = require('multer')
-const fs = require('fs') //file system
+const cookirParser = require("cookie-parser");
+const imageDown = require("image-downloader");
+const multer = require("multer");
+const fs = require("fs"); //file system
 require("dotenv").config(); // FOR PROPER WORKING OF ENV
 
+app.use(cookirParser());
 
-app.use(cookirParser())
-
-app.use('/uploads',express.static(__dirname+'/uploads'))
+app.use("/uploads", express.static(__dirname + "/uploads"));
 
 const dbconnect = async () => {
   await mongoose.connect(process.env.MONGOOSE_URL).then(
@@ -94,10 +94,11 @@ app.post("/login", async (req, res) => {
       if (pass) {
         // res.json('nice')
         const token = await jet.sign(
-          { email: userdoc.email, id: userdoc._id,name:userdoc.name },
+          { email: userdoc.email, id: userdoc._id, name: userdoc.name },
           jetDash,
           {}
         );
+        // console.log(token)
         // res.header('Access-Control-Allow-Credentials','tr  ue')
         // res.header('Access-Control-Allow-Origin','*')
         // res.header('Access-Control-Allow-Origin', "*");
@@ -118,45 +119,87 @@ app.post("/login", async (req, res) => {
   }
 });
 
+app.get("/profile", (req, res) => {
+  const { token } = req.cookies;
+  if (token) {
+    jet.verify(token, jetDash, {}, (er, data) => {
+      if (er) throw er;
+      res.json(data);
+    });
+  }
+  // res.json({token})
+});
 
-app.get('/profile',(req,res)=>{
-    const {token} = req.cookies;
-    if(token){
-      jet.verify(token,jetDash,{},(er,data)=>{
-        if (er) throw er;
-        res.json(data)
-      })
-    }
-    // res.json({token})
-})
-
-
-app.post('/logout',async (req,res)=>{
-  return res.cookie("token", '', { sameSite: "none", secure: true }).json(true)
-})
+app.post("/logout", async (req, res) => {
+  return res.cookie("token", "", { sameSite: "none", secure: true }).json(true);
+});
 // console.log(__dirname)
 
-
-app.post('/addImage-account' , async (req,res)=>{
-  const {link} = req.body;
-  const newName ='photo' + Date.now() + '.jpg'
+app.post("/addImage-account", async (req, res) => {
+  const { link } = req.body;
+  const newName = "photo" + Date.now() + ".jpg";
   await imageDown.image({
-    url:link,
-    dest:__dirname + '/uploads/' + newName
-  })
-  res.json(newName)
-})
+    url: link,
+    dest: __dirname + "/uploads/" + newName,
+  });
+  res.json(newName);
+});
 
-const photoMiddleWare = multer({dest:'uploads'})
-app.post('/upload',photoMiddleWare.array('photos',100),(req,res)=>{
-  const uploadedfiles = []
-  for (let i=0;i<req.files.length;i++){
-    const {path,originalname} = req.files[i];
-    newpath = path+'.jpg';
-    fs.renameSync(path,newpath)
-    uploadedfiles.push(newpath.replace('uploads\\',''))
+const photoMiddleWare = multer({ dest: "uploads" });
+app.post("/upload", photoMiddleWare.array("photos", 100), (req, res) => {
+  const uploadedfiles = [];
+  // console.log(req)
+  for (let i = 0; i < req.files.length; i++) {
+    const { path, originalname } = req.files[i];
+    newpath = path + ".jpg";
+    fs.renameSync(path, newpath);
+    uploadedfiles.push(newpath.replace("uploads\\", ""));
   }
-  console.log(uploadedfiles)
-  res.json(uploadedfiles)
-})
+  // console.log(uploadedfiles)
+  res.json(uploadedfiles);
+});
+
+app.post("/places", async (req, res) => {
+  const token = req.cookies;
+  const {
+    title,
+    address,
+    addedPhotos,
+    description,
+    perks,
+    extraInfo,
+    checkIn,
+    checkOut,
+    maxGuests,
+  } = req.body;
+
+
+  console.log(JSON.parse(token))
+  jet.verify(JSON.parse(token), jetDash, {}, async (err, userData) => {
+
+    if (err){
+      console.log(err)
+      throw err;
+    } 
+      
+    const placeDoc = await Place.create({
+      owner: userData.id,
+      title,
+      address,
+      addedPhotos,
+      description,
+      perks,
+      extraInfo,
+      checkIn,
+      checkOut,
+      maxGuests,
+    }).then(()=>{console.log("uploaded")}).catch((err)=>{console.log(err)});
+    placeDoc.save()
+    res.json(placeDoc) 
+  
+  });
+
+});
+
+
 app.listen(6969);

@@ -1,7 +1,7 @@
-// const mon = require('mongoose')
-import mongoose, { mongo } from 'mongoose'
+const mongoose = require('mongoose')
+// import mongoose from 'mongoose'
 const PlaceSchema = mongoose.Schema({
-    owner:{type:mon.Schema.Types.ObjectId,ref:'User'}, // id of user and poplulate method i think
+    owner:{type:mongoose.Schema.Types.ObjectId,ref:'User'}, // id of user and poplulate method i think
     title:String,
     address:String,
     images:[String],
