@@ -36,7 +36,7 @@ dbconnect()
     console.log(res);
   });
 
-const jetDash = "jetIsSecondGrestetDualist";
+const jetDash = "sdfsdfsfd";
 app.use(express.json()); // for parsing json
 // app.use(
 //   cors({
@@ -160,7 +160,7 @@ app.post("/upload", photoMiddleWare.array("photos", 100), (req, res) => {
 });
 
 app.post("/places", async (req, res) => {
-  const token = req.cookies;
+  const { token } = req.cookies;
   const {
     title,
     address,
@@ -173,15 +173,13 @@ app.post("/places", async (req, res) => {
     maxGuests,
   } = req.body;
 
-
-  console.log(JSON.parse(token))
-  jet.verify(JSON.parse(token), jetDash, {}, async (err, userData) => {
-
-    if (err){
-      console.log(err)
+  // console.log(token);
+  jet.verify(token, jetDash, {}, async (err, userData) => {
+    if (err) {
+      // console.log("SDFCVAPSIHASOUBIALSUB");
       throw err;
-    } 
-      
+    }
+    
     const placeDoc = await Place.create({
       owner: userData.id,
       title,
@@ -193,13 +191,17 @@ app.post("/places", async (req, res) => {
       checkIn,
       checkOut,
       maxGuests,
-    }).then(()=>{console.log("uploaded")}).catch((err)=>{console.log(err)});
-    placeDoc.save()
-    res.json(placeDoc) 
-  
+    })
+      .then(() => {
+        console.log("place uploaded")
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    
+    // placeDoc.save();
+    res.json(placeDoc);
   });
-
 });
-
 
 app.listen(6969);
