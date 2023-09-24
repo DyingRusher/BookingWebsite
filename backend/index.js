@@ -184,8 +184,8 @@ app.post("/places", async (req, res) => {
       owner: userData.id,
       title,
       address,
-      addedPhotos,
-      description,
+      images:addedPhotos[0],
+      des:description,
       perks,
       extraInfo,
       checkIn,
@@ -193,7 +193,7 @@ app.post("/places", async (req, res) => {
       maxGuests,
     })
       .then(() => {
-        console.log("place uploaded")
+        console.log(addedPhotos)
       })
       .catch((err) => {
         console.log(err);
@@ -203,5 +203,15 @@ app.post("/places", async (req, res) => {
     res.json(placeDoc);
   });
 });
+
+
+app.get('/places',async (req,res)=>{
+  const {token} = req.cookies;
+
+  jet.verify(token,jetDash,{},async  (err,data)=>{
+    const {id} = data;
+    res.json( await Place.find({owner:id}))
+  })
+})
 
 app.listen(6969);
