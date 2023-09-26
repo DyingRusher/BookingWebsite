@@ -6,6 +6,9 @@ export default function PhotoUploader({uploadedPhoto, onChange} ) {
   const [photoLink, setPhotoLink] = useState("");
   const [readyAddPhoto, setReadyAddPhoto] = useState(false);
 
+  if(uploadedPhoto == undefined){
+    // uploadedPhoto = []
+  }
   async function AddPhotos(ev) {
     setReadyAddPhoto(true);
     ev.preventDefault();
@@ -26,7 +29,7 @@ export default function PhotoUploader({uploadedPhoto, onChange} ) {
     for (let i = 0; i < files1.length; i++) {
         //  data.append("photos", files1[i]);
     
-    data.set('photos',files1[0])
+    data.set('photos',files1[0]) 
     // console.log(data)
     const response = await axios.post("/upload", data, {
         headers: {
@@ -69,7 +72,7 @@ export default function PhotoUploader({uploadedPhoto, onChange} ) {
           />
         )}
 
-        {uploadedPhoto.length > 0 &&
+        {uploadedPhoto.length > 0 && 
           uploadedPhoto.map((link) => (
             <div className="flex h-32" key={link}>
               <img

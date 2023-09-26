@@ -214,4 +214,52 @@ app.get('/places',async (req,res)=>{
   })
 })
 
+app.get('/places/:id',async (req,res)=>{
+  const {id} = req.params;
+  res.json(await Place.findById(id))
+})
+
+app.put('/places/:id',async(req,res)=>{
+  const {id} = req.params;
+  const {token} = req.cookies
+  const {
+    title,
+    address,
+    addedPhotos,
+    description,
+    perks,
+    extraInfo,
+    checkIn,
+    checkOut,
+    maxGuests,
+  } = req.body;
+  
+  jet.verify(token,jetDash,{},async (err,userData)=>{
+    if(err) throw err;
+    const placeData = await Place.findById(id);
+    // console.log(userData.id)
+    // console.log(id)
+   
+    // console.log(placeData.owner)
+    if(userData.id == placeData.owner.toString()){
+      await placeData.set({
+        title,
+        address,
+        images:addedPhotos,
+        des:description,
+        perks,
+        extraInfo,
+        checkIn,
+        checkOut,
+        maxGuests,
+      })
+    await placeData.save();
+    console.log("updated place")
+    res.json('ok')
+
+    }
+  })
+
+})
+
 app.listen(6969);

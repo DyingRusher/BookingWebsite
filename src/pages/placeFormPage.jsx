@@ -1,23 +1,54 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PhotoUploader from "./photoUploder";
 import Perks from "./Perks";
 import axios from "axios";
 import { Link, Navigate, useParams } from "react-router-dom";
 export default function PlaceFormPage() {
+  var [title, setTitle] = useState("");
+  var [address, setAddress] = useState("");
+  var [addedPhotos, setAddedPhotos] = useState([]);
+  var [description, setDescription] = useState("");
+  var [perks, setPerks] = useState([]);
+  var [extraInfo, setExtraInfo] = useState("");
+  var [checkOut, setCheckOut] = useState("");
+  var [checkIn, setCheckIn] = useState("");
+  var [maxGuests, setMaxGuests] = useState("");
+  var [redirect, setRedirect] = useState("");
+  //  console.log("place",updateDate)\
+  const { action } = useParams();
+  var [uPlace,setUPlace] = useState({});
+  useEffect(() => {
+    if (action != "new" && action != undefined) {
+      axios.get("/places/" + action).then((res) => {
+        const { data } = res;
+        // console.log(data)
+        const updateDate = data;
+        setUPlace(updateDate)
 
-  const [title, setTitle] = useState("");
-  const [address, setAddress] = useState("");
-  const [addedPhotos, setAddedPhotos] = useState([]);
-  const [description, setDescription] = useState("");
-  const [perks, setPerks] = useState([]);
-  const [extraInfo, setExtraInfo] = useState("");
-  const [checkOut, setCheckOut] = useState("");
-  const [checkIn, setCheckIn] = useState("");
-  const [maxGuests, setMaxGuests] = useState("");
-  const [redirect,setRedirect] = useState('');
+        setTitle(updateDate.title);
 
-  if(redirect){
-    return <Navigate to={redirect}/>
+        setAddress(updateDate.address);
+        addedPhotos = updateDate.images;
+        setAddedPhotos(updateDate.images)
+        // description = updateDate.des
+        setDescription(updateDate.des);
+        // perks = updateDate.perks
+        setPerks(updateDate.perks)
+        // extraInfo = updateDate.extraInfo(
+        setExtraInfo(updateDate.extraInfo);
+        // checkOut = updateDate.checkOut
+        setCheckOut(updateDate.checkOut);
+        // checkIn = updateDate.checkIn
+        setCheckIn(updateDate.checkIn);
+        // maxGuests = updateDate.maxGuests
+        setMaxGuests(updateDate.maxGuests);
+      });
+      // setUPlace()
+    }
+  }, []);
+
+  if (redirect) {
+    return <Navigate to={redirect} />;
   }
   function h2andp(header, para) {
     // setPerks(["sdf"])
@@ -29,11 +60,9 @@ export default function PlaceFormPage() {
     );
   }
 
-
-  async function addNewPlace(ev) {
+  async function savePlace(ev) {
     ev.preventDefault();
-
-    const {data:responseData } = await axios.post("/places", {
+    const placeData = {
       title,
       address,
       addedPhotos,
@@ -42,13 +71,28 @@ export default function PlaceFormPage() {
       extraInfo,
       checkIn,
       checkOut,
-      maxGuests
-    });
-    setRedirect("/")
+      maxGuests,
+    };
 
-}
+    if (action != 'new' && action!=undefined) {
+      //update
+     
+      // console.log(uPlace)
+      const { data: responseData } = await axios.put("/places/" + action, {
+        id: uPlace._id,
+        ...placeData,
+      });
+      setRedirect("/");
+    } else {
+      //add new place
+      const { data: responseData } = await axios.post("/places", {
+        ...placeData,
+      });
+      setRedirect("/");
+    }
+  }
   return (
-    <form className="" onSubmit={addNewPlace}>
+    <form className="" onSubmit={savePlace}>
       {h2andp("Title", "This is for your place,should be short and catchy")}
       <input
         type="text"

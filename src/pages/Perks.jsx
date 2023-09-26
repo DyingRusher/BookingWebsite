@@ -16,7 +16,7 @@ export default function Perks({selected,onChange}){
         <>
         <div className="grid mt-3 grid-cols-2 md:grid-cols-4 lg:grid-cols-6">
             <label className={perks()}>
-              <input type="checkbox" onChange={handelPerks} name="wifi" id="" />
+              <input type="checkbox" onChange={handelPerks} checked={selected.includes('wifi')} name="wifi" id="" />
               <span className="flex gap-4 my-auto">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -36,7 +36,7 @@ export default function Perks({selected,onChange}){
               </span>
             </label>
             <label className={perks()}>
-              <input type="checkbox" onChange={handelPerks} name="ac" id="" />
+              <input type="checkbox" onChange={handelPerks}checked={selected.includes('ac')} name="ac" id="" />
               <span className="flex gap-4  my-auto">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -56,7 +56,7 @@ export default function Perks({selected,onChange}){
               </span>
             </label>
             <label className={perks()}>
-              <input type="checkbox" onChange={handelPerks} name="swimmingpool" id="" />
+              <input type="checkbox" onChange={handelPerks}checked={selected.includes('swimmingpool')} name="swimmingpool" id="" />
               <span className="flex gap-4 my-auto">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -81,7 +81,7 @@ export default function Perks({selected,onChange}){
               </span>
             </label>
             <label className={perks()}>
-              <input type="checkbox" onChange={handelPerks} name="garden" id="" />
+              <input type="checkbox" onChange={handelPerks}checked={selected.includes('garden')} name="garden" id="" />
               <span className="flex gap-4 my-auto">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -101,7 +101,7 @@ export default function Perks({selected,onChange}){
               </span>
             </label>
             <label className={perks()}>
-              <input type="checkbox" onChange={handelPerks} name="security" id="" />
+              <input type="checkbox" onChange={handelPerks}checked={selected.includes('security')} name="security" id="" />
               <span className="flex gap-4 my-auto">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

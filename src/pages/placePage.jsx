@@ -6,20 +6,24 @@ import axios from "axios";
 import PlaceFormPage from "./placeFormPage";
 
 export default function PlacePage() {
-  const { action } = useParams();
-  const [places, setPlaces] = useState([]);
-  useEffect(() => {
+  var { action } = useParams();
+  const [placeData,setPlaceData] = useState('');
+  var [places, setPlaces] = useState('');
+  
+  // console.log("action",action)
+  
+  useEffect( () => {
     axios.get("/places").then(({ data }) => {
       setPlaces(data);
-      // console.log(data);
+     
     });
   }, []);
 
-  // console.log(action)
+  
 
   return (
     <div>
-      {action !== "new" && (
+      {action == undefined && (
         <div className="text-center p-4 gap-4">
           <Link
             className="inline-flex gap-2 bg-search p-2 rounded-full text-white"
@@ -48,8 +52,8 @@ export default function PlacePage() {
                   key={place._id}
                   className="cursor-pointer grow shrink-0 flex border m-4 rounded-2xl bg-gray-200"
                 >
-                  <div className="w-32 h-32 bg-gray-300 m-3">
-                    {place.images.length > 0 && <img src={place.images[0]} />}
+                  <div className="flex  w-32 h-32 bg-gray-300 m-3">
+                    {place.images.length > 0 && (<img className="object-cover"src={'http://localhost:6969/uploads/' + place.images[0]} />)}
                   </div>
                   <div>
                   <h2 className="m-1 text-xl">{place.title}</h2>
@@ -61,7 +65,8 @@ export default function PlacePage() {
           </div>
         </div>
       )}
-      {action === "new" && <PlaceFormPage />}
+      {action !== "new" && action != undefined && <PlaceFormPage />}
+      {action === "new" && <PlaceFormPage updateDate={' '}/>}
     </div>
   );
 }
