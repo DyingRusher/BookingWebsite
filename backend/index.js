@@ -270,4 +270,7 @@ app.put('/places/:id',async(req,res)=>{
 app.get('/all-places',async (req,res)=>{
   res.json(await Place.find())
 })
+
+
+
 app.listen(6969);

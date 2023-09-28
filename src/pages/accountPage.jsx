@@ -102,7 +102,7 @@ function AccountPage() {
           <br />
           <button
             onClick={logout}
-            className="max-w-sm rounded-full bg-search text-white my-4 p-2"
+            className="max-w-sm w-full rounded-full bg-search text-white my-4 p-2"
           >
             Log out
           </button>

@@ -15,7 +15,7 @@ const Index_page = () => {
       <div className="grid gap-x-6 gap-y-8 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {places.length > 0 &&
           places.map((place) => (
-            <div key={place._id} className="  rounded-xl">
+            <Link to={'/place/' + place._id} key={place._id} className="  rounded-xl">
               {place.images?.[0] && (
                 <img
                   className="rounded-2xl bg-gray-400 object-cover aspect-square"
@@ -28,7 +28,7 @@ const Index_page = () => {
                 <h3 className="text-sm text-gray-800">{place.address}</h3>
                 <div className="text-gray-700 mt-1"><span className="font-bold">${place.price}</span> per night</div>
               </div>
-            </div>
+            </Link>
           ))}
       </div>
     </>

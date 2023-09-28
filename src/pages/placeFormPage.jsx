@@ -172,7 +172,7 @@ export default function PlaceFormPage() {
         </div>
       </div>
 
-      <button className="bg-search rounded-full text-white mt-4 h-8 max-w-2xl ">
+      <button className="bg-search w-full rounded-full text-white mt-4 h-8 max-w-2xl ">
         Save
       </button>
     </form>
