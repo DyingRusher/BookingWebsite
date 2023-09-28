@@ -171,6 +171,7 @@ app.post("/places", async (req, res) => {
     checkIn,
     checkOut,
     maxGuests,
+    price
   } = req.body;
 
   // console.log(token);
@@ -191,6 +192,7 @@ app.post("/places", async (req, res) => {
       checkIn,
       checkOut,
       maxGuests,
+      price
     })
       .then(() => {
         console.log(addedPhotos)
@@ -205,7 +207,7 @@ app.post("/places", async (req, res) => {
 });
 
 
-app.get('/places',async (req,res)=>{
+app.get('/user-places',async (req,res)=>{
   const {token} = req.cookies;
 
   jet.verify(token,jetDash,{},async  (err,data)=>{
@@ -232,6 +234,7 @@ app.put('/places/:id',async(req,res)=>{
     checkIn,
     checkOut,
     maxGuests,
+    price
   } = req.body;
   
   jet.verify(token,jetDash,{},async (err,userData)=>{
@@ -252,6 +255,7 @@ app.put('/places/:id',async(req,res)=>{
         checkIn,
         checkOut,
         maxGuests,
+        price
       })
     await placeData.save();
     console.log("updated place")
@@ -262,4 +266,8 @@ app.put('/places/:id',async(req,res)=>{
 
 })
 
+
+app.get('/all-places',async (req,res)=>{
+  res.json(await Place.find())
+})
 app.listen(6969);

@@ -13,7 +13,7 @@ export default function PlacePage() {
   // console.log("action",action)
   
   useEffect( () => {
-    axios.get("/places").then(({ data }) => {
+    axios.get("/user-places").then(({ data }) => {
       setPlaces(data);
      
     });

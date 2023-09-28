@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate, NavigationType } from "react-router-dom";
 import axios from 'axios'
 
 export default function Signup() {
@@ -12,6 +12,8 @@ export default function Signup() {
       ev.preventDefault()
       axios.post('/register',{
         name,email,password
+      }).then(()=>{
+        <Navigate to={'/login'}/>
       })
     }catch(er){
       alert(`Registration Failed ,try again\nerror:${er}`)

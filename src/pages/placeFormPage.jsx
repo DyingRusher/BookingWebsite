@@ -13,6 +13,7 @@ export default function PlaceFormPage() {
   var [checkOut, setCheckOut] = useState("");
   var [checkIn, setCheckIn] = useState("");
   var [maxGuests, setMaxGuests] = useState("");
+  var [price, setprice] = useState("");
   var [redirect, setRedirect] = useState("");
   //  console.log("place",updateDate)\
   const { action } = useParams();
@@ -42,6 +43,7 @@ export default function PlaceFormPage() {
         setCheckIn(updateDate.checkIn);
         // maxGuests = updateDate.maxGuests
         setMaxGuests(updateDate.maxGuests);
+        setprice(updateDate.price)
       });
       // setUPlace()
     }
@@ -72,6 +74,7 @@ export default function PlaceFormPage() {
       checkIn,
       checkOut,
       maxGuests,
+      price
     };
 
     if (action != 'new' && action!=undefined) {
@@ -130,7 +133,7 @@ export default function PlaceFormPage() {
       <p className="text-sm text-gray-500">
         Remember to have time window for room cleaning
       </p>
-      <div className="flex grid sm:grid-cols-3 gap-2">
+      <div className="flex grid sm:grid-cols-2 md:grid-cols-4 gap-2">
         <div className="mt-2 -mb-1">
           <h3>Check in time</h3>
           <input
@@ -156,6 +159,15 @@ export default function PlaceFormPage() {
             placeholder="5"
             value={maxGuests}
             onChange={(ev) => setMaxGuests(ev.target.value)}
+          />
+        </div>
+        <div className="mt-2 -mb-1">
+          <h3>Price per night</h3>
+          <input
+            type="number"
+            placeholder="6000"
+            value={price}
+            onChange={(ev) => setprice(ev.target.value)}
           />
         </div>
       </div>
