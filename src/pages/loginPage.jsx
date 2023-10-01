@@ -7,7 +7,7 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [validU, setValidU] = useState(false);
-  const { setUser } = useContext(userContext);
+  const { setReady,setUser } = useContext(userContext);
 
   async function LoginUser(ev) {
     ev.preventDefault();
@@ -26,6 +26,7 @@ export default function Login() {
 
       if (!!user1) {
         setValidU(true);
+        setReady(true)
         console.log(validU)
         setUser(user1.data);
       }

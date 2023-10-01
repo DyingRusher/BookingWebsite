@@ -4,12 +4,14 @@ const app = express();
 const jet = require("jsonwebtoken");
 const bcrypt = require("bcryptjs"); // for encryption
 const Place = require("./models/Place.js");
+const Booking = require("./models/booking.js");
 const cors = require("cors"); // for cammunication between ports
 const mongoose = require("mongoose");
 const cookirParser = require("cookie-parser");
 const imageDown = require("image-downloader");
 const multer = require("multer");
 const fs = require("fs"); //file system
+// const { resolve } = require("path");
 require("dotenv").config(); // FOR PROPER WORKING OF ENV
 
 app.use(cookirParser());
@@ -17,6 +19,7 @@ app.use(cookirParser());
 app.use("/uploads", express.static(__dirname + "/uploads"));
 
 const dbconnect = async () => {
+  console.log(process.env.MONGOOSE_URL);
   await mongoose.connect(process.env.MONGOOSE_URL).then(
     () => {
       console.log(`Connected to database`);
@@ -59,6 +62,15 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 // console.log(process.env.MONGOOSE_URL);
+
+async function getUserToken(req){
+  return new Promise(async (resolve,reject)=>{
+     jet.verify(req.cookies.token,jetDash,{},async (err,userDoc)=>{
+      if (err) throw err;
+      resolve(userDoc)
+    })
+  })
+}
 
 app.get("/test", (req, res) => {
   res.json("done");
@@ -171,7 +183,7 @@ app.post("/places", async (req, res) => {
     checkIn,
     checkOut,
     maxGuests,
-    price
+    price,
   } = req.body;
 
   // console.log(token);
@@ -180,50 +192,49 @@ app.post("/places", async (req, res) => {
       // console.log("SDFCVAPSIHASOUBIALSUB");
       throw err;
     }
-    
+
     const placeDoc = await Place.create({
       owner: userData.id,
       title,
       address,
-      images:addedPhotos[0],
-      des:description,
+      images: addedPhotos[0],
+      des: description,
       perks,
       extraInfo,
       checkIn,
       checkOut,
       maxGuests,
-      price
+      price,
     })
       .then(() => {
-        console.log(addedPhotos)
+        console.log(addedPhotos);
       })
       .catch((err) => {
         console.log(err);
       });
-    
+
     // placeDoc.save();
     res.json(placeDoc);
   });
 });
 
+app.get("/user-places", async (req, res) => {
+  const { token } = req.cookies;
 
-app.get('/user-places',async (req,res)=>{
-  const {token} = req.cookies;
+  jet.verify(token, jetDash, {}, async (err, data) => {
+    const { id } = data;
+    res.json(await Place.find({ owner: id }));
+  });
+});
 
-  jet.verify(token,jetDash,{},async  (err,data)=>{
-    const {id} = data;
-    res.json( await Place.find({owner:id}))
-  })
-})
+app.get("/places/:id", async (req, res) => {
+  const { id } = req.params;
+  res.json(await Place.findById(id));
+});
 
-app.get('/places/:id',async (req,res)=>{
-  const {id} = req.params;
-  res.json(await Place.findById(id))
-})
-
-app.put('/places/:id',async(req,res)=>{
-  const {id} = req.params;
-  const {token} = req.cookies
+app.put("/places/:id", async (req, res) => {
+  const { id } = req.params;
+  const { token } = req.cookies;
   const {
     title,
     address,
@@ -234,43 +245,68 @@ app.put('/places/:id',async(req,res)=>{
     checkIn,
     checkOut,
     maxGuests,
-    price
+    price,
   } = req.body;
-  
-  jet.verify(token,jetDash,{},async (err,userData)=>{
-    if(err) throw err;
+
+  jet.verify(token, jetDash, {}, async (err, userData) => {
+    if (err) throw err;
     const placeData = await Place.findById(id);
     // console.log(userData.id)
     // console.log(id)
-   
+
     // console.log(placeData.owner)
-    if(userData.id == placeData.owner.toString()){
+    if (userData.id == placeData.owner.toString()) {
       await placeData.set({
         title,
         address,
-        images:addedPhotos,
-        des:description,
+        images: addedPhotos,
+        des: description,
         perks,
         extraInfo,
         checkIn,
         checkOut,
         maxGuests,
-        price
-      })
-    await placeData.save();
-    console.log("updated place")
-    res.json('ok')
-
+        price,
+      });
+      await placeData.save();
+      console.log("updated place");
+      res.json("ok");
     }
+  });
+});
+
+app.get("/all-places", async (req, res) => {
+  res.json(await Place.find());
+});
+
+app.post("/booking", async (req, res) => {
+  const userData = await getUserToken(req);
+  const { place, checkIn, checkOut, noGuest, fullName, phoneNo, prizeHotel } =
+    req.body;
+
+  Booking.create({
+    place,
+    checkIn,
+    checkOut,
+    noGuest,
+    fullName,
+    phoneNo,
+    prize:prizeHotel,
+    user:userData.id
   })
+    .then((doc) => {
+      res.json(doc);
+    })
+    .catch((err) => {
+      throw err;
+    });
+});
 
+app.get('/bookings',async (req,res)=>{
+  const userData =await getUserToken(req);
+  // console.log(await Booking.find({user:userData.id}))
+  res.json(await Booking.find({user:userData.id}).populate('place'))
 })
-
-
-app.get('/all-places',async (req,res)=>{
-  res.json(await Place.find())
-})
-
 
 
 app.listen(6969);

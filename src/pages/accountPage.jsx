@@ -3,11 +3,13 @@ import { userContext } from "../UserContext";
 import { Link, Navigate, useParams } from "react-router-dom";
 import axios from "axios";
 import PlacePage from "./placePage";
+import BookingsPage from "./bookingsPage";
 
 function AccountPage() {
   const { user, ready, setUser } = useContext(userContext);
   const [redirect, setRedirect] = useState(null);
   let { subpage } = useParams();
+  // console.log("subpage",subpage)
   if (subpage === undefined) {
     subpage = "profile";
   }
@@ -60,7 +62,7 @@ function AccountPage() {
           </svg>
           My Profile
         </Link>
-        <Link className={ActiveClass("booking")} to={"/account/booking"}>
+        <Link className={ActiveClass("bookings")} to={"/account/bookings"}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -110,6 +112,7 @@ function AccountPage() {
       )}
 
       {subpage === "places" && <PlacePage />}
+      {subpage === "bookings" && <BookingsPage/>}
     </div>
   );
 }
