@@ -24,8 +24,8 @@ function App() {
               <Route index element={<Index_page />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
-              {/* <Route path ='/account/bookings' element={<BookingsPage/>}/>
-              <Route path="/account/booking/:id" element={<BookingPage/>}/> */}
+              {/* <Route path ='/account/bookings' element={<BookingsPage/>}/> */}
+              <Route path="/account/booking/:id" element={<BookingPage/>}/>
               <Route path="/account/:subpage?" element={<AccountPage/>}/>
               <Route path="/account/:subpage/:action" element={<AccountPage/>}/>
               <Route path='/place/:id' element={<PlaceViewPage/>}/>

@@ -3,6 +3,8 @@ import { differenceInCalendarDays } from "date-fns";
 import { Navigate } from "react-router-dom";
 import axios from "axios";
 import { userContext } from "../UserContext";
+
+
 export default function BookingWidgt({ place }) {
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
@@ -10,12 +12,13 @@ export default function BookingWidgt({ place }) {
   const [fullName, setFullName] = useState("");
   const [phoneNo, setPhoneNo] = useState("");
   const [redirect, setRedirect] = useState("");
-  const [prizeHotel, setPrizeHotel] = useState("");
+  // const [totalprice, setTotalPrice] = useState("");
+  // let totalpr = 0;
   const {user} = useContext(userContext)
 
   useEffect(()=>{
+    // console.log(user)
     setFullName(user.name)
-
   },[user])
 
   
@@ -25,10 +28,12 @@ export default function BookingWidgt({ place }) {
       new Date(checkOut),
       new Date(checkIn)
     );
-    // setPrizeHotel(numberofNight * place.prize);
+    // setTotalPrice(numberofNight * place.prize);
+    totalpr = numberofNight * place.prize;
   }
 
   async function handelBooking() {
+    console.log(totalpr)
     const data = {
       checkIn,
       checkOut,
@@ -36,7 +41,7 @@ export default function BookingWidgt({ place }) {
       fullName,
       phoneNo,
       place: place._id,
-      prizeHotel:numberofNight * place.prize,
+      prizeHotel:totalpr,
     };
     const res = await axios.post("booking", data);
     const bookingId = res.data._id;
@@ -50,7 +55,7 @@ export default function BookingWidgt({ place }) {
   return (
     <div>
       <div className="shadow p-4 rounded-2xl bg-gray-300">
-        <div className="text-2xl text-center">
+        <div className="text-2xl text-center mb-5">
           Price : ${place.price}/per night
         </div>
         <div className="border rounded-2xl mb-4">

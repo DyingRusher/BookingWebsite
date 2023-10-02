@@ -92,7 +92,10 @@ export default function PlaceViewPage() {
           <div>
             {place.images?.[0] && (
               <div>
-                <img onClick={()=>{setAllPhotos(true)}}
+                <img
+                  onClick={() => {
+                    setAllPhotos(true);
+                  }}
                   className="cursor-pointer aspect-square object-cover "
                   src={"http://localhost:6969/uploads/" + place.images[0]}
                 />
@@ -101,14 +104,20 @@ export default function PlaceViewPage() {
           </div>
           <div className="gap-2 grid">
             {place.images?.[1] && (
-              <img onClick={()=>{setAllPhotos(true)}}
+              <img
+                onClick={() => {
+                  setAllPhotos(true);
+                }}
                 className="cursor-pointer aspect-square object-cover relative"
                 src={"http://localhost:6969/uploads/" + place.images[1]}
               />
             )}
             <div className="overflow-hidden">
               {place.images?.[2] && (
-                <img onClick={()=>{setAllPhotos(true)}}
+                <img
+                  onClick={() => {
+                    setAllPhotos(true);
+                  }}
                   className="cursor-pointer aspect-square object-cover"
                   src={"http://localhost:6969/uploads/" + place.images[0]}
                 />
@@ -139,16 +148,16 @@ export default function PlaceViewPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr] py-8 gap-6">
-        <div>
+        <div className="text-gray-800">
           <div className="my-4">
             <h2 className="font-semibold text-2xl">Description</h2>
             {place.des}
           </div>
-          Check-in:{place.checkIn}
+          Check-in:{" " + place.checkIn}
           <br />
-          Check-out:{place.checkOut}
+          Check-out:{" " + place.checkOut}
           <br />
-          Max number of Guest:{place.maxGuests}
+          Max number of Guest:{" " + place.maxGuests}
         </div>
         <div>
           <BookingWidgt place={place} />

@@ -4,6 +4,7 @@ import { Link, Navigate, useParams } from "react-router-dom";
 import axios from "axios";
 import PlacePage from "./placePage";
 import BookingsPage from "./bookingsPage";
+import BookingPage from "./bookingPage";
 
 function AccountPage() {
   const { user, ready, setUser } = useContext(userContext);
@@ -113,6 +114,7 @@ function AccountPage() {
 
       {subpage === "places" && <PlacePage />}
       {subpage === "bookings" && <BookingsPage/>}
+      {/* {subpage === "booking" && <BookingPage/>} */}
     </div>
   );
 }

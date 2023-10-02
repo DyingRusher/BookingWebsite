@@ -132,6 +132,7 @@ app.post("/login", async (req, res) => {
 });
 
 app.get("/profile", (req, res) => {
+  
   const { token } = req.cookies;
   if (token) {
     jet.verify(token, jetDash, {}, (er, data) => {
